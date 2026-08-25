@@ -29,6 +29,7 @@ Use the type that matches the question you want the reader to answer:
 | `sequence` | Calls, returns, cache misses, and timing | `examples/cache-miss-request.sequence.json` |
 | `dataflow` | Data movement, transformations, and consumers | `examples/product-analytics.dataflow.json` |
 | `lifecycle` | States, retries, waits, and terminal outcomes | `examples/agent-run.lifecycle.json` |
+| `erd` | Tables, keys, per-end cardinality, junction tables | `examples/subscription-commerce.erd.json` |
 
 When the type is unclear, ask the built-in scenario guide:
 

@@ -29,6 +29,7 @@ npx skills add tt-a1i/archify -g
 | `sequence` | 调用、返回、缓存未命中和时序 | `examples/cache-miss-request.sequence.json` |
 | `dataflow` | 数据移动、转换和消费者 | `examples/product-analytics.dataflow.json` |
 | `lifecycle` | 状态、重试、等待和终态 | `examples/agent-run.lifecycle.json` |
+| `erd` | 表结构、主外键、两端基数、关联表 | `examples/subscription-commerce.erd.json` |
 
 不确定类型时，可以询问内置场景指南：
 

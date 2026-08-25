@@ -230,6 +230,27 @@ const RAW_RECIPES = [
       prompt: '用 Archify 生命周期模式建模部署对象。展示排队、构建、验证、等待审批、晋级、回滚以及所有终态，并标注允许每次状态转换的事件和守卫条件。',
     },
   },
+  {
+    id: 'data-model', type: 'erd', proof: 'subscription-commerce',
+    presentation: { preset: 'classic', motion: 'static', views: 'recommended' },
+    signals: [['entity relationship', 16], ['er diagram', 14], ['data model', 14], ['database schema', 13], ['table design', 10], ['primary key', 8], ['foreign key', 9], ['many to many', 10], ['junction table', 10], ['实体关系', 16], ['数据模型', 14], ['数据库表结构', 13], ['表结构设计', 11], ['主键', 7], ['外键', 8], ['多对多', 10], ['关联表', 9]],
+    en: {
+      title: 'Data model (ER)', question: 'Which tables exist, which keys link them, and how strict is each relation?',
+      summary: 'A crow\'s-foot entity map with PK/FK facts, per-end cardinality, junction tables for many-to-many, and external ownership.',
+      useWhen: 'Schema design reviews, migration planning, onboarding to a data layer, or foreign-key impact analysis.',
+      avoidWhen: 'The question is runtime component topology, call order, state transitions, or data movement between systems.',
+      include: ['8–10 core entities', 'PK and FK facts on every relation', 'cardinality on both ends', 'junction tables for many-to-many'],
+      prompt: 'Use Archify erd mode to model this data layer. Show 8–10 entities with typed attributes and pk/fk/unique keys, per-end cardinality in crow\'s-foot notation, junction tables for many-to-many relations, and mark externally owned entities. Keep relationship labels as short verbs.',
+    },
+    zh: {
+      title: '数据模型（ER 图）', question: '有哪些表、靠哪些键关联、每条关系有多严格？',
+      summary: '用鸦脚记法表达实体、主外键事实、两端基数、多对多关联表与外部归属。',
+      useWhen: '表结构评审、迁移规划、数据层新人上手、外键影响分析。',
+      avoidWhen: '重点是运行时组件拓扑、调用顺序、状态流转或跨系统数据流动时，请换其他配方。',
+      include: ['8–10 个核心实体', '每条关系标主外键事实', '两端都要标基数', '多对多用关联表表达'],
+      prompt: '用 Archify erd 模式建模这个数据层。展示 8–10 个实体及其带类型的属性与 pk/fk/unique 标记，用鸦脚记法标注两端基数，多对多关系用关联表表达，并标出外部归属的实体；关系标签用简短动词。',
+    },
+  },
 ];
 
 export const SCENARIO_RECIPES = Object.freeze(RAW_RECIPES.map((recipe) => Object.freeze({
@@ -303,7 +324,7 @@ export function recommendScenario(query, options = {}) {
 
 export function formatScenarioList(lang = 'en') {
   const isZh = lang === 'zh';
-  const heading = isZh ? 'Archify 场景配方（11）' : 'Archify scenario recipes (11)';
+  const heading = isZh ? 'Archify 场景配方（12）' : 'Archify scenario recipes (12)';
   const intro = isZh
     ? '先选择你要回答的问题，再选择图表类型。可运行：archify guide "你的场景"'
     : 'Choose the question before the diagram type. Run: archify guide "your scenario"';

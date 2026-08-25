@@ -160,6 +160,19 @@ const CASES = [
     descriptionEn: 'A classic AWS web stack with edge delivery, authentication, API services, cache, persistence, and background work.',
     descriptionZh: '经典 AWS Web 栈：边缘分发、鉴权、API 服务、缓存、持久化与后台任务。',
   },
+  {
+    id: 'subscription-commerce',
+    type: 'erd',
+    input: 'subscription-commerce.erd.json',
+    output: 'subscription-commerce.erd.html',
+    focus: 'orders',
+    view: 'order-flow',
+    accent: '#fdba74',
+    titleEn: 'Subscription Commerce Data Model',
+    titleZh: '订阅电商数据模型',
+    descriptionEn: 'Crow\'s-foot entity cards with typed attributes, PK/FK/UQ keys, per-end cardinality, a junction table, and external identity ownership.',
+    descriptionZh: '鸦脚记法实体卡片：带类型的属性、主外键与唯一键、两端基数、关联表和外部身份归属。',
+  },
 ];
 
 const SHAPES = {
@@ -168,6 +181,7 @@ const SHAPES = {
   sequence: ['participants', 'messages'],
   dataflow: ['nodes', 'flows'],
   lifecycle: ['states', 'transitions'],
+  erd: ['entities', 'relationships'],
 };
 
 const TYPE_LABELS = {
@@ -176,6 +190,7 @@ const TYPE_LABELS = {
   sequence: 'Sequence',
   dataflow: 'Data flow',
   lifecycle: 'Lifecycle',
+  erd: 'Entity relationship',
 };
 
 function digest(buffer) {

@@ -71,7 +71,7 @@ If visual review changes the candidate, validation and delivery must run again b
 Return:
 
 ```text
-diagram_type: architecture|workflow|sequence|dataflow|lifecycle
+diagram_type: architecture|workflow|sequence|dataflow|lifecycle|erd
 output: /absolute/path/to/file.html
 specification_sha256: <receipt value>
 artifact_sha256: <receipt value>

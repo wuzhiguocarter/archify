@@ -81,6 +81,7 @@ const OFFICIAL_V1_EXAMPLES = {
   sequence: 'cache-miss-request.sequence.json',
   dataflow: 'product-analytics.dataflow.json',
   lifecycle: 'agent-run.lifecycle.json',
+  erd: 'subscription-commerce.erd.json',
 };
 
 for (const [mode, filename] of Object.entries(OFFICIAL_V1_EXAMPLES)) {
@@ -228,11 +229,27 @@ function narrowExplicitViewBoxDocuments() {
       })),
       transitions: [],
     },
+    erd: {
+      schema_version: 1,
+      diagram_type: 'erd',
+      meta: { title: 'Legacy narrow erd', viewBox: [380, 800] },
+      entities: ['core', 'reference', 'junction', 'external'].map((kind, index) => ({
+        id: `entity_${index}`,
+        name: `entity_${index}`,
+        kind,
+        column: 0,
+        row: index,
+        attributes: [{ name: 'id', type: 'uuid', key: 'pk' }],
+      })),
+      relationships: [
+        { from: 'entity_0', to: 'entity_1', fromCardinality: 'exactly-one', toCardinality: 'zero-or-many' },
+      ],
+    },
   };
 }
 
 test('legacy v1 explicit narrow viewBoxes never hard-fail on an implicit auto legend', () => {
-  const expectedNodeCounts = { architecture: 7, workflow: 7, sequence: 2, dataflow: 8, lifecycle: 8 };
+  const expectedNodeCounts = { architecture: 7, workflow: 7, sequence: 2, dataflow: 8, lifecycle: 8, erd: 4 };
   for (const [mode, doc] of Object.entries(narrowExplicitViewBoxDocuments())) {
     assert.equal(doc.meta.legend, undefined);
     const rendered = render(mode, doc);
@@ -242,6 +259,11 @@ test('legacy v1 explicit narrow viewBoxes never hard-fail on an implicit auto le
     if (mode === 'lifecycle') {
       assert.match(svg, />Legend</, 'a fitting implicit legend should remain visible');
       assert.equal((svg.match(/data-legend-semantic-kind=/g) || []).length, 8);
+    } else if (mode === 'erd') {
+      // A tall narrow canvas wraps the erd legend into rows that still fit,
+      // so the implicit legend stays visible instead of degrading.
+      assert.match(svg, />Legend</, 'a fitting wrapped implicit legend should remain visible');
+      assert.equal((svg.match(/data-legend-semantic-kind=/g) || []).length, 7);
     } else {
       assert.doesNotMatch(svg, />Legend</, `${mode}: an unfit implicit legend should degrade without overlap`);
     }

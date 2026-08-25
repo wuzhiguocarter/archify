@@ -76,7 +76,7 @@ in the generated viewer.
 
 - Node anchors start at side midpoints. `left`/`right` change the horizontal endpoint; `top`/`bottom` change the vertical endpoint. For an automatic Architecture relationship, unobstructed facing ports whose axis offset is under 16px may share one horizontal or vertical axis when both endpoints retain the 16px corner gutter. If exactly one endpoint belongs to a spread group, only its unshared counterpart moves; relationships spread at both endpoints keep their distinct ports and outside bridge.
 - A side is a direction contract. The first and final route segment must be perpendicular and outward/inward in the named direction.
-- Automatic Port Spread is a default renderer behavior for architecture, workflow, data-flow, and lifecycle diagrams. Shared automatic endpoints spread deterministically and symmetrically with a 16px corner gutter. It does not apply to sequence messages, single relationships, or explicit `via`, `channelX`, `channelY`, `labelAt`, or non-`auto` routes.
+- Automatic Port Spread is a default renderer behavior for architecture, workflow, data-flow, lifecycle, and erd diagrams. Shared automatic endpoints spread deterministically and symmetrically with a 16px corner gutter. ERD spread is field-aware: ports already anchored to distinct attribute rows keep their rows. It does not apply to sequence messages, single relationships, or explicit `via`, `channelX`, `channelY`, `labelAt`, or non-`auto` routes.
 - Showcase route rhythm: every nonzero segment must be at least 8px; every interior segment must be at least 16px. When spread ports are nearly parallel, the router uses a 24px endpoint stub and a 16px outside bridge instead of manufacturing a tiny dogleg.
 - Shared endpoint corridors are allowed only when they remain semantically unambiguous. Unrelated collinear overlap of 8px or more fails showcase.
 - Container borders are intentional pass-through geometry, but a long edge running along a structural border is not.
@@ -136,6 +136,10 @@ Stages express transformation or custody. Rows separate parallel streams. Label 
 ### Lifecycle
 
 Main phases use columns `0..4`; event and terminal bands use columns `0..2`. A recoverable failure needs a real transition back to an active state. A card or guided view saying “retry” is not topology.
+
+### Entity relationship
+
+Columns `0..3` and rows `0..3` place entities; card height follows the attribute count. Keep the main reading path across one row and give hub entities at most three adjacent edges. State cardinality on both ends of every relationship; `fromField`/`toField` anchor left/right ports to the key's attribute row. Model many-to-many with a junction entity rather than an implied dashed edge.
 
 ## Repository evidence
 

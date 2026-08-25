@@ -60,6 +60,18 @@ const FIXTURES = {
       { from: 'input', to: 'output', label: 'request', route: 'straight' },
     ],
   },
+  erd: {
+    schema_version: 1,
+    diagram_type: 'erd',
+    meta: { title: 'Core Entities Only', viewBox: [720, 420] },
+    entities: [
+      { id: 'left', name: 'customers', kind: 'core', column: 0, row: 0, attributes: [{ name: 'id', type: 'uuid', key: 'pk' }] },
+      { id: 'right', name: 'orders', kind: 'core', column: 1, row: 0, attributes: [{ name: 'id', type: 'uuid', key: 'pk' }] },
+    ],
+    relationships: [
+      { from: 'left', to: 'right', fromCardinality: 'exactly-one', toCardinality: 'zero-or-many' },
+    ],
+  },
   lifecycle: {
     schema_version: 1,
     diagram_type: 'lifecycle',
@@ -83,6 +95,7 @@ const CATALOGS = {
   sequence: ['emphasis', 'return', 'security', 'dashed', 'default'],
   dataflow: ['emphasis', 'security', 'dashed', 'database', 'default'],
   lifecycle: ['start', 'active', 'waiting', 'decision', 'success', 'failure', 'neutral', 'external'],
+  erd: ['core', 'reference', 'junction', 'external', 'emphasis', 'security', 'dashed', 'default', 'exactly-one', 'zero-or-one', 'one-or-many', 'zero-or-many'],
 };
 
 const AUTO_KINDS = {
@@ -91,6 +104,7 @@ const AUTO_KINDS = {
   sequence: ['emphasis', 'return'],
   dataflow: ['default'],
   lifecycle: ['start', 'active', 'success'],
+  erd: ['core', 'default', 'exactly-one', 'zero-or-many'],
 };
 
 function clone(value) {
@@ -291,7 +305,7 @@ test('label overrides preserve stable kinds and exact Semantic Legend boundaries
 
 test('strict per-renderer schemas reject malformed legend contracts with path-prefixed errors', () => {
   const known = {
-    architecture: 'frontend', workflow: 'frontend', sequence: 'default', dataflow: 'default', lifecycle: 'start',
+    architecture: 'frontend', workflow: 'frontend', sequence: 'default', dataflow: 'default', lifecycle: 'start', erd: 'exactly-one',
   };
   const cases = [
     [{ mode: 'sometimes' }, '/meta/legend/mode'],

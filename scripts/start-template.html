@@ -220,13 +220,14 @@
     </header>
 
     <section class="type-shell" aria-labelledby="type-label">
-      <p class="type-label" id="type-label"><span data-en="Choose the question shape" data-zh="选择问题形态">Choose the question shape</span><strong data-en="5 typed renderers" data-zh="5 种类型化渲染器">5 typed renderers</strong></p>
+      <p class="type-label" id="type-label"><span data-en="Choose the question shape" data-zh="选择问题形态">Choose the question shape</span><strong data-en="6 typed renderers" data-zh="6 种类型化渲染器">6 typed renderers</strong></p>
       <div class="type-tabs" role="tablist" aria-label="Diagram type">
         <button class="type-tab" type="button" role="tab" data-type="architecture" data-en="Architecture" data-zh="架构图">Architecture</button>
         <button class="type-tab" type="button" role="tab" data-type="workflow" data-en="Workflow" data-zh="工作流">Workflow</button>
         <button class="type-tab" type="button" role="tab" data-type="sequence" data-en="Sequence" data-zh="时序图">Sequence</button>
         <button class="type-tab" type="button" role="tab" data-type="dataflow" data-en="Data flow" data-zh="数据流">Data flow</button>
         <button class="type-tab" type="button" role="tab" data-type="lifecycle" data-en="Lifecycle" data-zh="生命周期">Lifecycle</button>
+        <button class="type-tab" type="button" role="tab" data-type="erd" data-en="Entity relationship" data-zh="实体关系">Entity relationship</button>
       </div>
     </section>
 
@@ -287,7 +288,7 @@
       'use strict';
 
       var DATA = JSON.parse(document.getElementById('start-data').textContent);
-      var KNOWN_TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle']);
+      var KNOWN_TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle', 'erd']);
       var KNOWN_AGENTS = new Set(['cursor', 'codex', 'claude-code', 'opencode']);
       var KNOWN_SOURCES = new Set(['artifact', 'gallery', 'readme', 'direct']);
       var EVENT_KEY = 'archify.start.events.v1';

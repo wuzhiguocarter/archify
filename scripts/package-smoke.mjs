@@ -107,6 +107,7 @@ try {
     ['sequence', 'cache-miss-request.sequence.json'],
     ['dataflow', 'product-analytics.dataflow.json'],
     ['lifecycle', 'agent-run.lifecycle.json'],
+    ['erd', 'subscription-commerce.erd.json'],
   ];
   for (const [mode, fixture] of fixtures) {
     const receipt = JSON.parse(run([

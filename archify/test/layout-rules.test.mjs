@@ -28,6 +28,7 @@ const EXAMPLES = {
   dataflow: 'product-analytics.dataflow.json',
   lifecycle: 'agent-run.lifecycle.json',
   architecture: 'web-app.architecture.json',
+  erd: 'subscription-commerce.erd.json',
 };
 
 function load(mode) {
@@ -616,14 +617,17 @@ test('contract: a too-wide label is never redirected into sublabel', () => {
     dataflow: 'An Extremely Long Node Label That Overflows',
     lifecycle: 'An Extremely Long State Label That Overflows',
     architecture: 'An Extremely Long Component Label Overflow',
+    erd: 'An Extremely Long Entity Name That Overflows',
   };
   const FIELD = {
     workflow: 'nodes', sequence: 'participants', dataflow: 'nodes',
-    lifecycle: 'states', architecture: 'components',
+    lifecycle: 'states', architecture: 'components', erd: 'entities',
   };
+  // ERD entities carry `name`; every other semantic collection uses `label`.
+  const NAME_FIELD = { erd: 'name', default: 'label' };
   for (const [mode, label] of Object.entries(LABELS)) {
     const d = load(mode);
-    d[FIELD[mode]][0].label = label;
+    d[FIELD[mode]][0][NAME_FIELD[mode] || NAME_FIELD.default] = label;
     const { code, stderr } = render(mode, d);
     assert.notEqual(code, 0, `${mode}: expected non-zero exit; stderr:\n${stderr}`);
     assert.ok(stderr.includes('wider than'), `${mode}: expected a width message:\n${stderr}`);

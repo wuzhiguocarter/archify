@@ -14,7 +14,7 @@
 
 Archify is an agent skill for Raven, Cursor, Claude Code, Codex CLI, and OpenCode. Give it a system description or repository; get an interactive, shareable technical map.
 
-- **Open it and present** — five diagram types, four presets, dark/light themes, built-in brand marks, and finite motion
+- **Open it and present** — six diagram types, four presets, dark/light themes, built-in brand marks, and finite motion
 - **Review architecture changes before merge** — compare two validated snapshots as Before / Delta / After, with exact added, removed, changed, moved, and rerouted facts
 - **Every interaction stays grounded** — search nodes, optionally open revision-verified source, trace upstream/downstream authored reach and exact routes, compare roles, and play guided stories without inventing topology
 - **One file, ready to trust and share** — typed JSON IR and deterministic checks produce self-contained HTML plus PNG, SVG, WebM, and 1200×630 share cards
@@ -144,14 +144,14 @@ Continue with focused requests such as `add Redis`, `move auth to the left`, or 
 | **Sequence** | API calls, cache fallback, auth, async traces | Callers, callees, returns, timing |
 | **Data Flow** | Pipelines, lineage, PII, consumers | Sources, transforms, stores, boundaries |
 | **Lifecycle** | States, retries, waits, terminal outcomes | States, events, retry and cancellation paths |
+| **ERD** | Schemas, keys, cardinality | Tables, attributes, keys |
 
 For a production deployment review, Architecture can optionally enable the
 `deployment-ownership` engineering profile. It fails closed when owners,
 single-region placement, private database scope, or named boundary crossings
-are missing. It is never enabled silently and validates authored facts—not live
-infrastructure. See the [checked deployment proof](https://tt-a1i.github.io/archify/gallery.html#proof-deployment-ownership).
+are missing. It is never silent and validates authored facts only. See the [checked deployment proof](https://tt-a1i.github.io/archify/gallery.html#proof-deployment-ownership).
 
-For design or PR review, Architecture Delta compares validated Before / Delta / After snapshots with a machine receipt. Select an exact authored change or play one finite Review—viewer-only, with no impact, risk, or merge-safety inference.
+For design or PR review, Architecture Delta compares validated Before / Delta / After snapshots with a machine receipt—viewer-only, with no impact or merge-safety inference.
 
 `node archify/bin/archify.mjs compare architecture base.json head.json architecture-delta.html --json`
 
@@ -179,6 +179,8 @@ Data Flow makes movement and sensitivity boundaries explicit:
 Lifecycle separates progress, waits, retries, and terminal outcomes:
 
 ![Lifecycle example](docs/assets/archify-lifecycle.png)
+
+![ERD example](docs/assets/archify-erd.png)
 
 Architecture examples: [`web-app`](examples/web-app.html) · [`Archify pipeline`](examples/archify-repo.html) · [`grid placement`](examples/archify-repo-grid.html) · [`desktop agent`](examples/maka-architecture.html)
 

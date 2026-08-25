@@ -12,6 +12,7 @@ against one of the schemas in this folder before any layout work happens.
 | `dataflow.schema.json` | `diagram_type: "dataflow"` | `stages`, `nodes`, `flows` |
 | `lifecycle.schema.json` | `diagram_type: "lifecycle"` | `lanes`, `states`, `transitions` |
 | `architecture.schema.json` | `diagram_type: "architecture"` | `components`, `boundaries`, `connections` |
+| `erd.schema.json` | `diagram_type: "erd"` | `entities`, `relationships` |
 | `common.schema.json` | shared `$defs` only (no top-level document) | — |
 
 Every diagram schema requires `schema_version`, `diagram_type`, `meta` (with
@@ -76,6 +77,7 @@ Supported keys are renderer-owned:
 | Sequence | `emphasis`, `return`, `security`, `dashed`, `default` |
 | Dataflow | `emphasis`, `security`, `dashed`, `database`, `default` |
 | Lifecycle | `start`, `active`, `waiting`, `decision`, `success`, `failure`, `neutral`, `external` |
+| ERD | `core`, `reference`, `junction`, `external`, `emphasis`, `security`, `dashed`, `default`, `exactly-one`, `zero-or-one`, `one-or-many`, `zero-or-many` |
 
 Labels are presentation only: they do not rename the stable kind, change
 nodes/relationships, or create Semantic Lens edge facts. Sequence message and
@@ -84,15 +86,17 @@ by exact compiled node facts receive the interactive Semantic Legend bridge;
 this includes Dataflow `database` when a real `nodes[].type: "database"` fact
 exists.
 
-Every relationship collection (`connections`, `edges`, `messages`, `flows`, and
-`transitions`) accepts an optional author-controlled `id` using the shared ID
+Every relationship collection (`connections`, `edges`, `messages`, `flows`,
+`transitions`, and `relationships`) accepts an optional author-controlled `id`
+using the shared ID
 pattern. The renderer keeps its source-order runtime key separately, while the
 authored ID enables a stable `#relation=<id>` viewer link that survives array
 reordering. ID-less documents remain valid and their relationship pins stay
 local to the current page.
 
 Every semantic node collection (`components`, `nodes`, `participants`, and
-`states`) also accepts one optional `brand`: either a canonical string returned
+`states`) also accepts one optional `brand` (ERD `entities` do not): either a
+canonical string returned
 by `archify brands --json`, or a digest-pinned `{ "url", "sha256" }` object
 returned by `archify brands capture <url> --json`. Known IDs and known-brand
 domains use the bundled vector catalogue. Unknown URLs must be captured in that
@@ -114,7 +118,7 @@ backwards-compatible fields do not bump the version.
 
 ## Shared definitions (common.schema.json)
 
-The five diagram schemas reference `common.schema.json#/$defs/...`:
+The six diagram schemas reference `common.schema.json#/$defs/...`:
 
 - `id` — element identifiers, pattern `^[a-zA-Z][a-zA-Z0-9_-]*$`
 - `point` — an `[x, y]` pair of numbers (used by `via` and `labelAt`)
@@ -133,7 +137,7 @@ stays in `lifecycle.schema.json`.
 
 ## Runtime validation
 
-At development time, `scripts/generate-validators.mjs` compiles all five
+At development time, `scripts/generate-validators.mjs` compiles all six
 schemas with ajv's draft 2020-12 standalone generator using `strict: true` and
 `allErrors: true`. The generated `renderers/shared/generated-validators.mjs`
 is committed and shipped with the skill, so runtime validation has no npm or
@@ -156,7 +160,7 @@ exports carry no repository evidence.
 ## Visual quality and engineering truth
 
 `meta.quality_profile` and `meta.engineering_profile` answer different
-questions. `quality_profile` is available in all five modes and controls how
+questions. `quality_profile` is available in all six modes and controls how
 strictly Archify judges composition. `engineering_profile` is an optional
 Architecture-only semantic contract; omitting it preserves the ordinary v1
 behavior.
