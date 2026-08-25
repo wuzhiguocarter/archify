@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "diagram_type": "erd",
+  "meta": {
+    "title": "Subscription Commerce Data Model",
+    "output": "examples/erd-subscription-commerce.html",
+    "viewBox": [1010, 620],
+    "quality_profile": "showcase",
+    "views": [
+      { "id": "catalog-path", "label": "Catalog path", "focus": ["productCategories", "products", "orderItems"], "note": "Follow category groupings into products and their order line items." },
+      { "id": "order-flow", "label": "Order flow", "focus": ["customers", "orders", "orderItems"], "note": "See how customers place orders that resolve into line items." },
+      { "id": "payment-refunds", "label": "Payments and refunds", "focus": ["orders", "payments", "refunds"], "note": "Trace settled payments and the refunds issued against them." }
+    ]
+  },
+  "entities": [
+    {
+      "id": "idpUsers",
+      "name": "idp_users",
+      "kind": "external",
+      "column": 0,
+      "row": 0,
+      "attributes": [
+        { "name": "subject", "type": "varchar(64)", "key": "pk" },
+        { "name": "issuer", "type": "varchar(120)" },
+        { "name": "last_verified", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "customers",
+      "name": "customers",
+      "kind": "core",
+      "column": 1,
+      "row": 0,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "email", "type": "varchar(255)", "key": "unique" },
+        { "name": "full_name", "type": "varchar(120)" },
+        { "name": "idp_subject", "type": "varchar(64)", "key": "fk" },
+        { "name": "created_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "orders",
+      "name": "orders",
+      "kind": "core",
+      "column": 2,
+      "row": 0,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "customer_id", "type": "uuid", "key": "fk" },
+        { "name": "total_cents", "type": "bigint" },
+        { "name": "placed_at", "type": "timestamptz" },
+        { "name": "updated_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "payments",
+      "name": "payments",
+      "kind": "core",
+      "column": 3,
+      "row": 0,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "order_id", "type": "uuid", "key": "fk" },
+        { "name": "method", "type": "varchar(16)" },
+        { "name": "amount_cents", "type": "bigint" },
+        { "name": "captured_at", "type": "timestamptz" }
+      ]
+    },
+    {
+      "id": "addresses",
+      "name": "addresses",
+      "kind": "core",
+      "column": 1,
+      "row": 1,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "customer_id", "type": "uuid", "key": "fk" },
+        { "name": "line1", "type": "varchar(120)" },
+        { "name": "city", "type": "varchar(60)" },
+        { "name": "country_code", "type": "char(2)" },
+        { "name": "is_default", "type": "bool" }
+      ]
+    },
+    {
+      "id": "orderItems",
+      "name": "order_items",
+      "kind": "junction",
+      "column": 2,
+      "row": 1,
+      "attributes": [
+        { "name": "order_id", "type": "uuid", "key": "pk" },
+        { "name": "product_id", "type": "uuid", "key": "pk" },
+        { "name": "quantity", "type": "int" },
+        { "name": "unit_price_cents", "type": "bigint" },
+        { "name": "currency", "type": "char(3)" }
+      ]
+    },
+    {
+      "id": "refunds",
+      "name": "refunds",
+      "kind": "core",
+      "column": 3,
+      "row": 1,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "payment_id", "type": "uuid", "key": "fk" },
+        { "name": "reason", "type": "varchar(48)" },
+        { "name": "amount_cents", "type": "bigint" }
+      ]
+    },
+    {
+      "id": "productCategories",
+      "name": "product_categories",
+      "kind": "reference",
+      "column": 1,
+      "row": 2,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "slug", "type": "varchar(64)", "key": "unique" },
+        { "name": "name", "type": "varchar(120)" }
+      ]
+    },
+    {
+      "id": "products",
+      "name": "products",
+      "kind": "core",
+      "column": 2,
+      "row": 2,
+      "attributes": [
+        { "name": "id", "type": "uuid", "key": "pk" },
+        { "name": "sku", "type": "varchar(32)", "key": "unique" },
+        { "name": "title", "type": "varchar(120)" },
+        { "name": "category_id", "type": "uuid", "key": "fk" },
+        { "name": "price_cents", "type": "bigint" }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "idp-identity",
+      "from": "idpUsers",
+      "to": "customers",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-one",
+      "toField": "idp_subject"
+    },
+    {
+      "id": "customer-orders",
+      "from": "customers",
+      "to": "orders",
+      "label": "places",
+      "variant": "emphasis",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many"
+    },
+    {
+      "id": "order-payments",
+      "from": "orders",
+      "to": "payments",
+      "label": "settled by",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many"
+    },
+    {
+      "id": "customer-addresses",
+      "from": "customers",
+      "to": "addresses",
+      "label": "ships to",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many"
+    },
+    {
+      "id": "order-items",
+      "from": "orders",
+      "to": "orderItems",
+      "label": "contains",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "one-or-many"
+    },
+    {
+      "id": "payment-refunds",
+      "from": "payments",
+      "to": "refunds",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many"
+    },
+    {
+      "id": "category-products",
+      "from": "productCategories",
+      "to": "products",
+      "label": "groups",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many",
+      "toField": "category_id"
+    },
+    {
+      "id": "product-items",
+      "from": "products",
+      "to": "orderItems",
+      "label": "appears in",
+      "fromCardinality": "exactly-one",
+      "toCardinality": "zero-or-many"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Reading the model",
+      "items": [
+        "Every relationship states cardinality on both ends in crow's-foot notation.",
+        "order_items is a junction table: its composite key (order_id, product_id) resolves the orders–products many-to-many.",
+        "idp_users is owned by the identity provider; customers.idp_subject is the local foreign key."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Key conventions",
+      "items": [
+        "PK marks primary-key attributes; composite keys repeat the badge across rows.",
+        "FK marks foreign keys that realize a drawn relationship.",
+        "UQ marks unique constraints such as customer email and product slug."
+      ]
+    }
+  ]
+}
